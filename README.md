@@ -65,9 +65,24 @@ copticizer.rb
 
 version 1.0.0
 
-converts ASCII characterset for the texts on the St Shenouda Society CD to the Coptic Unicode characterset
+converts ASCII characterset for the texts on the St Shenouda Society CD to the Coptic Unicode characterset. The Ruby program is free software. You can download from here: <https://www.ruby-lang.org/en/>
 
-Contributed by So Miyagawa, 12 June 2015
+Copyright 2015 So Miyagawa, 12 June 2015  This is free software, and you are welcome to modify and redistribute it under the GPL v3 license.
+
+This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
 
 _________________________________________
 SGML Excel Add-in for Mac (sgml_io_Mac_0.9.3.xla)
