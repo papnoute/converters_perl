@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# recode_coptic.pl Version 0.9.1
+# recode_coptic.pl Version 1.0.0
 
 # this assumes a UTF-8 file in one word per line format and 
 # automatically converts Coptic encodings
@@ -11,7 +11,7 @@
 use Getopt::Std;
 use utf8;
 binmode(STDOUT, ":utf8");
-binmode(STDIN, ":utf8");
+binmode STDIN;
 
 my $usage;
 {
@@ -27,7 +27,7 @@ Usage:  recode_coptic.pl [options] <FILE>
 Options and argument:
 
 -h              print this message and quit
--f <format>     Specify the input format. Default is Coptic font, other options are "CMCL"
+-f <format>     Specify the input format. Default is Coptic font, other options are "CopticLS", "CMCL", "avva_shenouda", "low" (converts all upper case utf8 Coptic to all lower case)
 
 <FILE>    A text file with Coptic text in a supported encoding
 
@@ -37,10 +37,10 @@ Read a file in Coptic font encoding and output standard Unicode as UTF-8:
   recode_coptic.pl in_Coptic.txt > out_utf8.txt
 
 Read a file in CMCL encoding and output standard Unicode as UTF-8:
-  recode_coptic.pl -i CMCL in_Coptic.txt > out_utf8.txt
+  recode_coptic.pl -f CMCL in_Coptic.txt > out_utf8.txt
 
   
-Copyright 2013, Amir Zeldes
+Copyright 2013-2015, Amir Zeldes, Caroline T. Schroeder (NagHammadi is added by So Miyagawa)
 
 This program is free software. You may copy or redistribute it under
 the same terms as Perl itself.
@@ -60,10 +60,16 @@ if ($opts{h} || (@ARGV == 0)) {
 #format
 if (!($format = $opts{f})) 
     {$format = "Coptic";}
+elsif($format eq "CopticLS")
+	{$format="CopticLS"}
 elsif($format eq "CMCL") 
 	{$format="CMCL";}
 elsif($format eq "low") 
 	{$format="low";}
+elsif($format eq "avva_shenouda") 
+	{$format="avva_shenouda";}
+elsif($format eq "NagHammadi") 
+	{$format="NagHammadi";}
 else {$format = "Coptic"}
 ### OPTIONS END ###
 
@@ -112,34 +118,109 @@ while (<FILE>) {
 	$line =~ s/3/ⲝ/g;
 
 	#capitals express supralinear stroke in Coptic font
-	$line =~ s/A/ⲁ̅/g;
-	$line =~ s/B/ⲃ̅/g;
-	$line =~ s/C/ⲑ̅/g;
-	$line =~ s/D/ⲇ̅/g;
-	$line =~ s/E/ⲉ̅/g;
-	$line =~ s/F/ϥ̅/g;
-	$line =~ s/G/ⲅ̅/g;
-	$line =~ s/H/ⲏ̅/g;
-	$line =~ s/I/ⲓ̅/g;
-	$line =~ s/J/ϫ̅/g;
-	$line =~ s/K/ⲕ̅/g;
-	$line =~ s/L/ⲗ̅/g;
-	$line =~ s/M/ⲙ̅/g;
-	$line =~ s/N/ⲛ̅/g;
-	$line =~ s/O/ⲟ̅/g;
-	$line =~ s/P/ⲡ̅/g;
-	$line =~ s/Q/ϭ̅/g;
-	$line =~ s/R/ⲣ̅/g;
-	$line =~ s/S/ⲥ̅/g;
-	$line =~ s/T/ⲧ̅/g;
-	$line =~ s/U/ⲩ̅/g;
-	$line =~ s/V/ⲫ̅/g;
-	$line =~ s/W/ⲱ̅/g;
-	$line =~ s/X/ϩ̅/g;
-	$line =~ s/Y/ⲭ̅/g;
-	$line =~ s/Z/ⲍ̅/g;
-	#$line =~ s/¥/ϣ̅/g;
-	#$line =~ s/\+/ϯ̅/g;
+	$line =~ s/A/ⲁ̄/g;
+	$line =~ s/B/ⲃ̄/g;
+	$line =~ s/C/ⲑ̄/g;
+	$line =~ s/D/ⲇ̄/g;
+	$line =~ s/E/ⲉ̄/g;
+	$line =~ s/F/ϥ̄/g;
+	$line =~ s/G/ⲅ̄/g;
+	$line =~ s/H/ⲏ̄/g;
+	$line =~ s/I/ⲓ̄/g;
+	$line =~ s/J/ϫ̄/g;
+	$line =~ s/K/ⲕ̄/g;
+	$line =~ s/L/ⲗ̄/g;
+	$line =~ s/M/ⲙ̄/g;
+	$line =~ s/N/ⲛ̄/g;
+	$line =~ s/O/ⲟ̄/g;
+	$line =~ s/P/ⲡ̄/g;
+	$line =~ s/Q/ϭ̄/g;
+	$line =~ s/R/ⲣ̄/g;
+	$line =~ s/S/ⲥ̄/g;
+	$line =~ s/T/ⲧ̄/g;
+	$line =~ s/U/ⲩ̄/g;
+	$line =~ s/V/ⲫ̄/g;
+	$line =~ s/W/ⲱ̄/g;
+	$line =~ s/X/ϩ̄/g;
+	$line =~ s/Y/ⲭ̄/g;
+	$line =~ s/Z/ⲍ̄/g;
+	#$line =~ s/¥/ϣ̄/g;
+	#$line =~ s/\+/ϯ̄/g;
+	}
+	elsif ($format eq "CopticLS")
+	#need to add c±s
+	{
+	$line =~ s/a/ⲁ/g;
+	$line =~ s/b/ⲃ/g;
+	$line =~ s/c/ⲭ/g;
+	$line =~ s/d/ⲇ/g;
+	$line =~ s/e/ⲉ/g;
+	$line =~ s/f/ⲫ/g;
+	$line =~ s/g/ⲅ/g;
+	$line =~ s/h/ⲏ/g;
+	$line =~ s/i/ⲓ/g;
+	$line =~ s/j/ϫ/g;
+	$line =~ s/k/ⲕ/g;
+	$line =~ s/l/ⲗ/g;
+	$line =~ s/m/ⲙ/g;
+	$line =~ s/n/ⲛ/g;
+	$line =~ s/o/ⲟ/g;
+	$line =~ s/p/ⲡ/g;
+	$line =~ s/q/ϭ/g;
+	$line =~ s/r/ⲣ/g;
+	$line =~ s/s/ⲥ/g;
+	$line =~ s/t/ⲧ/g;
+	$line =~ s/u/ⲩ/g;
+	$line =~ s/v/ϣ/g;
+	$line =~ s/w/ⲱ/g;
+	$line =~ s/x/ⲝ/g;
+	$line =~ s/y/ⲯ/g;
+	$line =~ s/z/ⲍ/g;
+	$line =~ s/v/ϣ/g;
+	$line =~ s/C/ϭ/g;
+	$line =~ s/D/Ⲇ/g;
+	$line =~ s/F/ϥ/g;
+	$line =~ s/G/ⳉ/g;
+	$line =~ s/H/ϩ/g;
+	$line =~ s/J/ϧ/g;
+	$line =~ s/Q/ⳋ/g;
+	$line =~ s/R/ⳁ/g;
+	$line =~ s/T/ϯ/g;
+	$line =~ s/Z/ⲹ/g;
+
+	#diacritics and strokes
+	$line =~ s/(.)±(.)=±(.)/$1︤$2︦$3︥/g;
+	$line =~ s/(.)±(.)/$1︤$2︥/g; #place binding supralinear strokes after each character
+	$line =~ s/=/̄/g; #equals sign after letter is a supralinear stroke
+	$line =~ s/O/᷍/g;
+	$line =~ s/P/̂/g;
+	$line =~ s/\//̣/g;
+	$line =~ s/Ú/̈/g;
+	$line =~ s/A/ⲏ̂/g;
+	$line =~ s/E/ⲉ̄/g;
+	$line =~ s/I/ⲓ̄/g;
+	$line =~ s/M/ⲛ̀/g;
+	$line =~ s/N/ⲛ̄/g;
+	$line =~ s/S/ⲏ⳰/g;
+	$line =~ s/U/ⲩ̄/g;
+
+	$line =~ s/K/K/g; #couldn't find keyboard character
+	$line =~ s/L/L/g; #couldn't find keyboard character
+	$line =~ s/V/V/g; #couldn't find keyboard character
+	$line =~ s/W/W/g; #couldn't find keyboard character
+	$line =~ s/X/X/g; #couldn't find keyboard character
+	$line =~ s/Y/Y/g; #couldn't find keyboard character
+	
+	#punctuation
+	$line =~ s/>/·/g;
+	$line =~ s/B/⟦/g;
+	$line =~ s/ı/⟧/g;
+	$line =~ s/:/:/g;
+	$line =~ s/…/;/g;
+	$line =~ s/</⳿/g;
+	
+
+	
 	}
 	elsif ($format eq "CMCL")
 	{
@@ -209,7 +290,102 @@ while (<FILE>) {
 	$line =~ s/Ⲝ/ⲝ/g;
 	
 	}
+	elsif ($format eq "avva_shenouda")
+	{
+	$line =~ s/=(.)/$1̄/g; #place supralinear stroke after character, not before as in avva shenouda
+	$line =~ s/a/ⲁ/g;
+	$line =~ s/b/ⲃ/g;
+	$line =~ s/c/ⲥ/g; #c is sigma
+	$line =~ s/d/ⲇ/g;
+	$line =~ s/e/ⲉ/g;
+	$line =~ s/f/ϥ/g;
+	$line =~ s/g/ⲅ/g;
+	$line =~ s/y/ⲏ/g; #y is eta
+	$line =~ s/i/ⲓ/g;
+	$line =~ s/j/ϫ/g;
+	$line =~ s/k/ⲕ/g;
+	$line =~ s/l/ⲗ/g;
+	$line =~ s/m/ⲙ/g;
+	$line =~ s/n/ⲛ/g;
+	$line =~ s/o/ⲟ/g;
+	$line =~ s/p/ⲡ/g;
+	$line =~ s/\[/ϭ/g; #chima is an opening square bracket
+	$line =~ s/r/ⲣ/g;
+	$line =~ s/\;/ⲑ/g; #semi colon is theta
+	$line =~ s/t/ⲧ/g;
+	$line =~ s/u/ⲩ/g;
+	$line =~ s/v/ⲫ/g;
+	$line =~ s/w/ⲱ/g;
+	$line =~ s/h/ϩ/g; #h is hori
+	$line =~ s/y/ⲭ/g;
+	$line =~ s/z/ⲍ/g;
+	$line =~ s/s/ϣ/g; #s is shai
+	$line =~ s/\]/ϯ/g; #right square bracket is ti
+	$line =~ s/v/ⲯ/g;
+	$line =~ s/x/ⲝ/g;
 
-	print $line;
+	}
+	elsif ($format eq "NagHammadi")
+	{
+	$line =~ s/A/︦/g;
+	$line =~ s/B/ⲛ̇/g;
+	$line =~ s/C/ϧ/g;
+	$line =~ s/D/ⲫ/g;
+	$line =~ s/E/⟧/g;
+	$line =~ s/F/ⲫ/g;
+	$line =~ s/G/G/g;
+	$line =~ s/H/H/g;
+	$line =~ s/I/ⲓ̈/g;
+	$line =~ s/J/`/g;
+	$line =~ s/K/ⲝ/g;
+	$line =~ s/L/ⲗ,/g;
+	$line =~ s/M/⸌ⲛ/g;
+	$line =~ s/N/ⲛ̄/g;
+	$line =~ s/O/̣/g;
+	$line =~ s/P/ⲯ/g;
+	$line =~ s/Q/q/g;
+	$line =~ s/R/ⳁ/g;
+	$line =~ s/S/ⲋ/g;
+	$line =~ s/T/ϯ/g;
+	$line =~ s/U/ⲩ/g;
+	$line =~ s/Ú/̈/g;
+	$line =~ s/V/V/g;
+	$line =~ s/W/⟦/g;
+	$line =~ s/X/·/g;
+	$line =~ s/Y/./g;
+	$line =~ s/Z/·/g;
+	$line =~ s/a/ⲁ/g;
+	$line =~ s/b/ⲃ/g;
+	$line =~ s/c/ϭ/g;
+	$line =~ s/d/ⲇ/g;
+	$line =~ s/e/ⲉ/g;
+	$line =~ s/f/ϥ/g;
+	$line =~ s/g/ⲅ/g;
+	$line =~ s/h/ϩ/g;
+	$line =~ s/i/ⲓ/g;
+	$line =~ s/j/ϫ/g;
+	$line =~ s/k/ⲕ/g;
+	$line =~ s/l/ⲗ/g;
+	$line =~ s/m/ⲙ/g;
+	$line =~ s/n/ⲛ/g;
+	$line =~ s/o/ⲟ/g;
+	$line =~ s/p/ⲡ/g;
+	$line =~ s/q/ϣ/g;
+	$line =~ s/r/ⲣ/g;
+	$line =~ s/s/ⲥ/g;
+	$line =~ s/t/ⲧ/g;
+	$line =~ s/u/ⲩ/g;
+	$line =~ s/v/ⲑ/g;
+	$line =~ s/w/ⲱ/g;
+	$line =~ s/x/ⲭ/g;
+	$line =~ s/y/ⲏ/g;
+	$line =~ s/z/ⲍ/g;
+	$line =~ s/=/̄/g;
+	$line =~ s/≥/·/g;
+	$line =~ s/ﬂ/ϥⲗ/g;
+	$line =~ s/\+/︦/g;
+	}
+
+	print $line ."\n";
 }
 
